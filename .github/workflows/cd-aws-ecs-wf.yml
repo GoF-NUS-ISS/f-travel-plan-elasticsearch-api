@@ -1,0 +1,78 @@
+on:
+  push:
+    branches: [ master ]
+
+name: Deploy to Amazon ECS
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # START-Build the project and deploy the Image using Maven JIT
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build with Maven for PUSH
+        if: ${{ github.event_name == 'push' }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          docker_hub_user_name: ${{ secrets.DOCKER_HUB_USER_NAME }}
+          docker_hub_password: ${{ secrets.DOCKER_HUB_REPO_SECRET_KEY }}
+        run: mvn -f microservicecloud/pom.xml clean install -Psonar org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pstaging -Djib.to.auth.username=333743 -Djib.to.auth.password=$docker_hub_password
+
+      # END-Build the project and deploy the Image using Maven JIT
+
+      - name: Configure AWS credentials
+        if: ${{ github.event_name == 'push' }}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Echo tag name from git sha
+        run: echo ${{ github.sha }}
+
+      # Below steps are to dynamically replace image tag in the task definition
+      # Task definttion is a json file place at the root of the repo.
+      # It contains info on containers, similar to Docker compose file
+      - name: Fill in the new image ID in the Amazon ECS task definition for travel-plan-api
+        if: ${{ github.event_name == 'push' }}
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: travel-plan-elasticsearch
+          image: docker.io/gofnusiss/travel-plan-elasticsearch:${{ github.sha }}
+
+      # Main Deployment happens at this step, only be triggered at Push event on Master Branch
+      - name: Deploy Amazon ECS task definition
+        if: ${{ github.event_name == 'push' }}
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: f-srv-travel-elastic-search
+          cluster: travel-plan-app-env-prod
+          wait-for-service-stability: true
