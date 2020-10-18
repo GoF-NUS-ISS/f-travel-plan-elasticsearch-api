@@ -150,10 +150,10 @@
 
     ],
 
-    "cpu": "1024",
+    "cpu": "512",
     "executionRoleArn": "arn:aws:iam::356567610291:role/ecsTaskExecutionRole",
-    "family": "task-def-travel-plan-api-main",
-    "memory": "4096",
+    "family": "f-task-def-travel-plan-elastic-search",
+    "memory": "2048",
     "networkMode": "awsvpc",
     "requiresCompatibilities": [ 
         "FARGATE" 
