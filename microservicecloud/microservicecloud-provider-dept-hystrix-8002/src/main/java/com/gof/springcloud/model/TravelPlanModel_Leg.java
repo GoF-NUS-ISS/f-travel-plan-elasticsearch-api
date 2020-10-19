@@ -31,16 +31,16 @@ public class TravelPlanModel_Leg extends TravelPlanModel_DayNode {
     private String to;
 
 	@Field(type = FieldType.Date)
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     @ApiModelProperty(value = "start on")
 	private Date startOn;
 
 	@Field(type = FieldType.Date)
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     @ApiModelProperty(value = "return date")
-	private Date returnDate;
+	private Date stopAt;
 
 	@Field(type = FieldType.Keyword)
     @ApiModelProperty(value = "transport mode")
