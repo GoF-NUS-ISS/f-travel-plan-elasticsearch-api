@@ -13,26 +13,6 @@
           {
             "containerPath": "/usr/share/elasticsearch/config/elasticsearch.yml",
             "sourceVolume": "./elasticsearch.yml"
-          },
-          {
-            "containerPath": "/usr/share/elasticsearch/config/elasticsearch.key",
-            "sourceVolume": "./bundle-ssl/elasticsearch/elasticsearch.key"
-          },
-          {
-            "containerPath": "/usr/share/elasticsearch/config/elasticsearch.crt",
-            "sourceVolume": "./bundle-ssl/elasticsearch/elasticsearch.crt"
-          },
-          {
-            "containerPath": "/usr/share/elasticsearch/config/ca.crt",
-            "sourceVolume": "_Bundle-SslCaCa_Crt"
-          },
-          {
-            "containerPath": "/usr/share/elasticsearch/config/http.p12",
-            "sourceVolume": "./elasticsearch-ssl-http/elasticsearch/elasticsearch/http.p12"
-          },
-          {
-            "containerPath": "/usr/share/elasticsearch/data",
-            "sourceVolume": "elasticsearch_data"
           }
         ],
         "name": "elasticsearch",
@@ -48,95 +28,12 @@
         ]
       },
       {
-        "environment": [
-          {
-            "name": "ES_JAVA_OPTS",
-            "value": "-Xms1g -Xmx2g"
-          }
-        ],
-        "essential": true,
-        "image": "docker.elastic.co/kibana/kibana:7.9.0",
-        "links": [
-          "elasticsearch"
-        ],
-        "mountPoints": [
-          {
-            "containerPath": "/usr/share/kibana/config/kibana.yml",
-            "sourceVolume": "./kibana.yml"
-          },
-          {
-            "containerPath": "/usr/share/kibana/config/kibana.crt",
-            "sourceVolume": "./bundle-ssl/kibana/kibana.crt"
-          },
-          {
-            "containerPath": "/usr/share/kibana/config/kibana.key",
-            "sourceVolume": "./bundle-ssl/kibana/kibana.key"
-          },
-          {
-            "containerPath": "/usr/share/kibana/config/ca.crt",
-            "sourceVolume": "_Bundle-SslCaCa_Crt"
-          }
-        ],
-        "name": "kibana",
-        "portMappings": [
-          {
-            "containerPort": 5601,
-            "hostPort": 5601
-          }
-        ]
-      },
-      {
-        "command": [
-          "logstash",
-          "-f",
-          "/etc/logstash/conf.d/logstash.conf"
-        ],
-        "essential": true,
-        "image": "docker.elastic.co/logstash/logstash:7.9.0",
-        "links": [
-          "elasticsearch"
-        ],
-        "mountPoints": [
-          {
-            "containerPath": "/etc/logstash/conf.d",
-            "sourceVolume": "__Conf_D"
-          },
-          {
-            "containerPath": "/etc/logstash/config/ca.crt",
-            "sourceVolume": "_Bundle-SslCaCa_Crt"
-          },
-          {
-            "containerPath": "/usr/share/logstash/config/logstash.yml",
-            "sourceVolume": "_Logstash_Yml"
-          }
-        ],
-        "name": "logstash",
-        "portMappings": [
-          {
-            "containerPort": 4560,
-            "hostPort": 4560
-          },
-          {
-            "containerPort": 9600,
-            "hostPort": 9600
-          },
-          {
-            "containerPort": 5044,
-            "hostPort": 5044
-          }
-        ]
-      },
-      {
         "essential": true,
         "image": "travel-plan-elasticsearch",
         "mountPoints": [
           {
             "containerPath": "/log",
             "sourceVolume": "_Log"
-          },
-          {
-            "containerPath": "/usr/share/elasticsearch/config/ca.crt",
-            "sourceVolume": "_Bundle-SslCaCa_Crt"
           }
         ],
         "name": "travel-plan-elasticsearch",
@@ -175,70 +72,9 @@
       },
       {
         "host": {
-          "sourcePath": "./bundle-ssl/ca/ca.crt"
-        },
-        "name": "_Bundle-SslCaCa_Crt"
-      },
-      {
-        "host": {
           "sourcePath": "./elasticsearch.yml"
         },
         "name": "_Elasticsearch_Yml"
-      },
-      {
-        "host": {
-          "sourcePath": "./bundle-ssl/elasticsearch/elasticsearch.key"
-        },
-        "name": "_Bundle-SslElasticsearchElasticsearch_Key"
-      },
-      {
-        "host": {
-          "sourcePath": "./bundle-ssl/elasticsearch/elasticsearch.crt"
-        },
-        "name": "_Bundle-SslElasticsearchElasticsearch_Crt"
-      },
-      {
-        "host": {
-          "sourcePath": "./elasticsearch-ssl-http/elasticsearch/elasticsearch/http.p12"
-        },
-        "name": "_Elasticsearch-Ssl-HttpElasticsearchElasticsearchHttp_P12"
-      },
-      {
-        "host": {
-          "sourcePath": "elasticsearch_data"
-        },
-        "name": "Elasticsearch_Data"
-      },
-      {
-        "host": {
-          "sourcePath": "./kibana.yml"
-        },
-        "name": "_Kibana_Yml"
-      },
-      {
-        "host": {
-          "sourcePath": "./bundle-ssl/kibana/kibana.crt"
-        },
-        "name": "_Bundle-SslKibanaKibana_Crt"
-      },
-      {
-        "host": {
-          "sourcePath": "./bundle-ssl/kibana/kibana.key"
-        },
-        "name": "_Bundle-SslKibanaKibana_Key"
-      },
-      {
-        "host": {
-          "sourcePath": "../conf.d"
-        },
-        "name": "__Conf_D"
-      },
-      {
-        "host": {
-          "sourcePath": "./logstash.yml"
-        },
-        "name": "_Logstash_Yml"
       }
-
     ]
  }
