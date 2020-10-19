@@ -1,124 +1,70 @@
 version: "3"
 services:
-  travel-plan-mongo:
-    image: mongo:4.0
-    container_name: mongo
-    command: --smallfiles
-    ports:
-      - 27017:27017
-    volumes:
-      - /opt/mongodb:/data/db
-
-  travel-plan-redis:
-    image: redis:5.0.5
-    container_name: redis
-    command: redis-server
-    ports:
-      - 6379:6379
-    volumes:
-      - /opt/redis/data:/data
-      - /opt/redis/logs:/logs
-#
-  travel-plan-eureka:
-    build: ./microservicecloud-eureka-7001
-    image: eureka1
-    container_name: eureka1
-    ports:
-      - "7001:7001"
-
-  travel-plan-api:
-    build: ./microservicecloud-provider-dept-hystrix-8001
-    image: travel-plan-api
-    container_name: travel-plan-api
-    ports:
-      - "8001:8001"
-    volumes:
-      - ./log:/log
-
   travel-plan-elasticsearch:
-    build: ./microservicecloud-provider-dept-hystrix-8002
+    build: microservicecloud-provider-dept-hystrix-8002
     image: travel-plan-elasticsearch
-    container_name: travel-plan-elasticsearch
+    container_name: travel-plan-elasticsearch.local
     ports:
       - "8002:8002"
     volumes:
       - ./log:/log
       - ./bundle-ssl/ca/ca.crt:/usr/share/elasticsearch/config/ca.crt
 
-  travel-plan-zuul:
-    build: ./microservicecloud-zuul-gateway-9527
-    image: travel-plan-zuul
-    container_name: travel-plan-zuul
-    ports:
-      - "9527:9527"
+  #  elasticsearch:
+  #    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
+  #    container_name: elasticsearch
+  #    hostname: elasticsearch
+  #    environment:
+  #      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #    ports:
+  #      - "9200:9200"
+  #      - "9300:9300"
+  #    volumes:
+  #      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+  #      - ./bundle-ssl/elasticsearch/elasticsearch.key:/usr/share/elasticsearch/config/elasticsearch.key
+  #      - ./bundle-ssl/elasticsearch/elasticsearch.crt:/usr/share/elasticsearch/config/elasticsearch.crt
+  #      - ./bundle-ssl/ca/ca.crt:/usr/share/elasticsearch/config/ca.crt
+  #      - ./elasticsearch-ssl-http/elasticsearch/elasticsearch/http.p12:/usr/share/elasticsearch/config/http.p12
+  #      - elasticsearch_data:/usr/share/elasticsearch/data
+  #
+  #  kibana:
+  #    image: docker.elastic.co/kibana/kibana:7.9.0
+  #    container_name: kibana
+  #    hostname: kibana
+  #    environment:
+  #      ES_JAVA_OPTS: "-Xms1g -Xmx2g"
+  #    ports:
+  #      - "5601:5601"
+  #    links:
+  #      - elasticsearch
+  #    depends_on:
+  #      - elasticsearch
+  #    volumes:
+  #      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+  #      - ./bundle-ssl/kibana/kibana.crt:/usr/share/kibana/config/kibana.crt
+  #      - ./bundle-ssl/kibana/kibana.key:/usr/share/kibana/config/kibana.key
+  #      - ./bundle-ssl/ca/ca.crt:/usr/share/kibana/config/ca.crt
+  #
+  #  logstash:
+  #    image: docker.elastic.co/logstash/logstash:7.9.0
+  #    container_name: logstash
+  #    hostname: logstash
+  #    command: logstash -f /etc/logstash/conf.d/logstash.conf
+  #    volumes:
+  #      - ../conf.d:/etc/logstash/conf.d
+  #      - ./bundle-ssl/ca/ca.crt:/etc/logstash/config/ca.crt
+  #      - ./logstash.yml:/usr/share/logstash/config/logstash.yml
+  #    links:
+  #      - elasticsearch
+  #    depends_on:
+  #      - elasticsearch
+  #    ports:
+  #      - "4560:4560"
+  #      - "9600:9600"
+  #      - "5044:5044"
+  #
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
-    container_name: elasticsearch
-    hostname: elasticsearch
-    environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./bundle-ssl/elasticsearch/elasticsearch.key:/usr/share/elasticsearch/config/elasticsearch.key
-      - ./bundle-ssl/elasticsearch/elasticsearch.crt:/usr/share/elasticsearch/config/elasticsearch.crt
-      - ./bundle-ssl/ca/ca.crt:/usr/share/elasticsearch/config/ca.crt
-      - ./elasticsearch-ssl-http/elasticsearch/elasticsearch/http.p12:/usr/share/elasticsearch/config/http.p12
-      - elasticsearch_data:/usr/share/elasticsearch/data
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.9.0
-    container_name: kibana
-    hostname: kibana
-    environment:
-      ES_JAVA_OPTS: "-Xms1g -Xmx2g"
-    ports:
-      - "5601:5601"
-    links:
-      - elasticsearch
-    depends_on:
-      - elasticsearch
-    volumes:
-      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
-      - ./bundle-ssl/kibana/kibana.crt:/usr/share/kibana/config/kibana.crt
-      - ./bundle-ssl/kibana/kibana.key:/usr/share/kibana/config/kibana.key
-      - ./bundle-ssl/ca/ca.crt:/usr/share/kibana/config/ca.crt
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:7.9.0
-    container_name: logstash
-    hostname: logstash
-    command: logstash -f /etc/logstash/conf.d/logstash.conf
-    volumes:
-      - ../conf.d:/etc/logstash/conf.d
-      - ./bundle-ssl/ca/ca.crt:/etc/logstash/config/ca.crt
-      - ./logstash.yml:/usr/share/logstash/config/logstash.yml
-    links:
-      - elasticsearch
-    depends_on:
-      - elasticsearch
-    ports:
-      - "4560:4560"
-      - "9600:9600"
-      - "5044:5044"
-
-  standalone:
-    image: apachepulsar/pulsar
-    container_name: pulsar
-    ports:
-      - 8080:8080
-      - 6650:6650
-    environment:
-      - BOOKIE_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
-    volumes:
-      - /opt/pulsar/data:/data
-      - /opt/pulsar/conf:/conf
-    command: >
-      /bin/bash -c
-      "bin/apply-config-from-env.py conf/standalone.conf
-      && bin/pulsar standalone"
-
-volumes: {"elasticsearch_data"}
+networks:
+  default:
+    external:
+      name: test-dev-shared-network

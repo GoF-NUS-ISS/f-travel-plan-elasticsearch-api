@@ -1,10 +1,10 @@
 server:
   port: 8002
   
-mybatis:
-  config-location: classpath:mybatis/mybatis.cfg.xml
-  type-aliases-package: com.gof.springcloud.entities
-  mapper-locations: classpath:mybatis/mapper/*.xml
+#mybatis:
+#  config-location: classpath:mybatis/mybatis.cfg.xml
+#  type-aliases-package: com.gof.springcloud.entities
+#  mapper-locations: classpath:mybatis/mapper/*.xml
 
 logging:
   file:
@@ -12,16 +12,6 @@ logging:
 spring:
    application:
     name: microservicecloud-travel-elasticsearch
-#   data:
-#    mongodb:
-#      uri: mongodb://mongo.local:27017
-#      database: travelplan
-   redis:
-      database: 0
-      host: redis.local
-      port: 6379
-      password: 
-      timeout: 10000
    datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
