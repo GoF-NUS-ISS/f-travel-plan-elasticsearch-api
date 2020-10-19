@@ -1,10 +1,6 @@
 server:
   port: 8002
-  
-#mybatis:
-#  config-location: classpath:mybatis/mybatis.cfg.xml
-#  type-aliases-package: com.gof.springcloud.entities
-#  mapper-locations: classpath:mybatis/mapper/*.xml
+
 
 logging:
   file:
@@ -26,8 +22,6 @@ spring:
    elasticsearch: 
     rest: 
       uris: localhost:9200
-      username: elastic
-      password: GKP9cas5NneoB1dgIDnU
       
 eureka:
   client: #client register into eureka
