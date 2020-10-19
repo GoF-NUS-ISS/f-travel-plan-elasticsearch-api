@@ -17,8 +17,8 @@ import lombok.Data;
 public class TravelPlanModel_Day {
 
     @Field(type = FieldType.Date)
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private Date date;
 
     @Field(type = FieldType.Nested)
