@@ -8,24 +8,18 @@ services:
       - "8002:8002"
     volumes:
       - ./log:/log
-      - ./bundle-ssl/ca/ca.crt:/usr/share/elasticsearch/config/ca.crt
 
-  #  elasticsearch:
-  #    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
-  #    container_name: elasticsearch
-  #    hostname: elasticsearch
-  #    environment:
-  #      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-  #    ports:
-  #      - "9200:9200"
-  #      - "9300:9300"
-  #    volumes:
-  #      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-  #      - ./bundle-ssl/elasticsearch/elasticsearch.key:/usr/share/elasticsearch/config/elasticsearch.key
-  #      - ./bundle-ssl/elasticsearch/elasticsearch.crt:/usr/share/elasticsearch/config/elasticsearch.crt
-  #      - ./bundle-ssl/ca/ca.crt:/usr/share/elasticsearch/config/ca.crt
-  #      - ./elasticsearch-ssl-http/elasticsearch/elasticsearch/http.p12:/usr/share/elasticsearch/config/http.p12
-  #      - elasticsearch_data:/usr/share/elasticsearch/data
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
+    container_name: elasticsearch
+    hostname: elasticsearch
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
   #
   #  kibana:
   #    image: docker.elastic.co/kibana/kibana:7.9.0

@@ -44,14 +44,10 @@ import javax.net.ssl.SSLContext;
 public class ESRestClient {
 
 	private static final int ADDRESS_LENGTH = 2;
-	private static final String HTTP_SCHEME = "https";
+	private static final String HTTP_SCHEME = "http";
 
 	@Value("${spring.elasticsearch.rest.uris}")
 	private String ipAddress;
-	@Value("${spring.elasticsearch.rest.username}")
-	private String username;
-	@Value("${spring.elasticsearch.rest.password}")
-	private String password;
 
 	@Bean
 	public RestClientBuilder restClientBuilder() {
@@ -63,10 +59,6 @@ public class ESRestClient {
 
 	@Bean(name = "highLevelClient")
 	public RestHighLevelClient highLevelClient(@Autowired RestClientBuilder restClientBuilder) {
-
-
-		final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-		credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
 
 		// Set SocketTimeout and set ConnectTimeout
 		restClientBuilder.setRequestConfigCallback(
@@ -82,17 +74,7 @@ public class ESRestClient {
 				log.error(node.getHost() + "--->this node fail");
 			}
 		});
-		// Set username and password
-		restClientBuilder.setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
 
-			@SneakyThrows
-			@Override
-			public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
-				return httpClientBuilder
-						.setDefaultCredentialsProvider(credentialsProvider)
-						.setSSLContext(getSSLContext());
-			}
-		});
 		return new RestHighLevelClient(restClientBuilder);
 	}
 
@@ -108,28 +90,6 @@ public class ESRestClient {
 			log.error("Imported ip params are not correct");
 			return null;
 		}
-	}
-
-	private SSLContext getSSLContext() throws CertificateException, IOException {
-		try{
-			Path caCertificatePath = Paths.get("./usr/share/elasticsearch/config/ca.crt");
-			CertificateFactory factory =
-					CertificateFactory.getInstance("X.509");
-			Certificate trustedCa;
-			try (InputStream is = Files.newInputStream(caCertificatePath)) {
-				trustedCa = factory.generateCertificate(is);
-			}
-			KeyStore trustStore = KeyStore.getInstance("pkcs12");
-			trustStore.load(null, null);
-			trustStore.setCertificateEntry("ca", trustedCa);
-			SSLContextBuilder sslContextBuilder = SSLContexts.custom()
-					.loadTrustMaterial(trustStore, null);
-			return sslContextBuilder.build();
-		}
-		catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
-			log.error("ssl error: {}", e.getMessage());
-		};
-		return null;
 	}
 
 }
