@@ -14,12 +14,12 @@ services:
     container_name: elasticsearch
     hostname: elasticsearch
     environment:
+      - "discovery.type=single-node"
+      - "logger.level=info"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - "9200:9200"
       - "9300:9300"
-    volumes:
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
   #
   #  kibana:
   #    image: docker.elastic.co/kibana/kibana:7.9.0
