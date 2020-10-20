@@ -35,7 +35,7 @@
         "mountPoints": [
           {
             "containerPath": "/log",
-            "sourceVolume": "_Log"
+            "sourceVolume": "fs-c2633f40"
           }
         ],
         "name": "travel-plan-elasticsearch",
@@ -64,13 +64,6 @@
           "fileSystemId": "fs-c2633f40",
           "transitEncryption": "ENABLED"
         }
-      },
-
-      {
-        "host": {
-          "sourcePath": "./log"
-        },
-        "name": "_Log"
       }
     ]
  }
