@@ -42,14 +42,14 @@ public class TravelPlanModel_Activity extends TravelPlanModel_DayNode {
     @ApiModelProperty(value="location")
 	private String location;
 
-	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	@Field(type = FieldType.Date)
     @ApiModelProperty(value = "time start")
 	private Date timeStart;
 
-	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+	@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	@Field(type = FieldType.Date)
     @ApiModelProperty(value = "time end")
 	private Date timeEnd;

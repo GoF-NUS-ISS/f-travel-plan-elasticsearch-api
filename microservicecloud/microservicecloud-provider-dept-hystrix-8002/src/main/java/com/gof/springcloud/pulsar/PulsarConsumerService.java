@@ -40,7 +40,7 @@ public class PulsarConsumerService {
 				elasticService.removeById(event.getModel().getId());
 			}
 		} catch (JsonProcessingException e) {
-			log.error("JsonProcessingException:{}", e);
+			log.error("JsonProcessingException: {}", e.getMessage());
 		}
 
 	}

@@ -3,6 +3,9 @@ package com.gof.springcloud.elasticsearch;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.client.indices.CreateIndexRequest;
@@ -42,10 +45,16 @@ public class ElasticServiceImpl implements IElasticService {
 	}
 
 	@Override
-	@SneakyThrows
 	public String save(TravelPlanModel plan) {
 		ObjectMapper objectMapper = new ObjectMapper();
-		String jsonStr = objectMapper.writeValueAsString(plan);
+		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		String jsonStr = null;
+		try {
+			jsonStr = objectMapper.writeValueAsString(plan);
+		} catch (JsonProcessingException e) {
+			log.info("exception {}", e.getMessage());
+		}
 		String Id = eSUtils.addData(jsonStr, IndexName, null);
 		log.info("insert successfully and get id{}: {}", Id, jsonStr);
 		return Id;

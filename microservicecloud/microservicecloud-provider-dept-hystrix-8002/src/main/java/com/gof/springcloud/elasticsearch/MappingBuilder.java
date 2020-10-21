@@ -41,7 +41,7 @@ public class MappingBuilder {
 						{
 							builder.startObject("date");
 							builder.field("type", "date");
-							builder.field("format", "yyyy-MM-dd HH:mm");
+							builder.field("format", "yyyy-MM-dd'T'HH:mm:ss");
 							builder.endObject();
 
 							// nodes - nested
@@ -76,12 +76,12 @@ public class MappingBuilder {
 
 									builder.startObject("timeStart");
 									builder.field("type", "date");
-									builder.field("format", "yyyy-MM-dd HH:mm");
+									builder.field("format", "yyyy-MM-dd'T'HH:mm:ss");
 									builder.endObject();
 
 									builder.startObject("timeEnd");
 									builder.field("type", "date");
-									builder.field("format", "yyyy-MM-dd HH:mm");
+									builder.field("format", "yyyy-MM-dd'T'HH:mm:ss");
 									builder.endObject();
 
 									// leg
@@ -95,12 +95,12 @@ public class MappingBuilder {
 
 									builder.startObject("startOn");
 									builder.field("type", "date");
-									builder.field("format", "yyyy-MM-dd HH:mm");
+									builder.field("format", "yyyy-MM-dd'T'HH:mm:ss");
 									builder.endObject();
 
-									builder.startObject("returnDate");
+									builder.startObject("stopAt");
 									builder.field("type", "date");
-									builder.field("format", "yyyy-MM-dd HH:mm");
+									builder.field("format", "yyyy-MM-dd'T'HH:mm:ss");
 									builder.endObject();
 
 									builder.startObject("transportMode");
