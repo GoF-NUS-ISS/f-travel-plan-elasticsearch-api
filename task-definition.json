@@ -27,7 +27,15 @@
             "containerPort": 9300,
             "hostPort": 9300
           }
-        ]
+        ],
+        "logConfiguration":{
+          "logDriver":"awslogs",
+          "options":{
+            "awslogs-group":"ecs/travel-app-log-grp-main-app",
+            "awslogs-region":"us-east-1",
+            "awslogs-stream-prefix":"elastic-search"
+          }
+        }
       },
       {
         "essential": true,
@@ -35,7 +43,7 @@
         "mountPoints": [
           {
             "containerPath": "/log",
-            "sourceVolume": "fs-c2633f40"
+            "sourceVolume": "efs-volume"
           }
         ],
         "name": "travel-plan-elasticsearch",
@@ -44,7 +52,15 @@
             "containerPort": 8002,
             "hostPort": 8002
           }
-        ]
+        ],
+        "logConfiguration":{
+          "logDriver":"awslogs",
+          "options":{
+            "awslogs-group":"ecs/travel-app-log-grp-main-app",
+            "awslogs-region":"us-east-1",
+            "awslogs-stream-prefix":"travel-plan-elasticsearch"
+          }
+        }
       }
 
     ],
